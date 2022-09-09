@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+
+*{
+    margin:0;
+    padding:0;
+    font-family: 'Noto Serif', serif;
+}
+
+nav{
+    display: inline;
+    top:0;
+    width:100%;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    background-color: steelblue;
+}
+
+.nav-links{
+    flex: 1;
+    text-align: right;
+}
+
+.nav-links ul li{
+    list-style: none;
+    display: inline-block;
+    padding: 8px 12px;
+    position: relative;
+}
+
+.nav-links ul li a{
+    color:beige;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.nav-links ul li::after{
+    content: '';
+    width: 0%;
+    height: 2px;
+    background: lightsteelblue;
+    display: block;
+    margin: auto;
+    transition: 0.5s;
+}
+
+.nav-links ul li:hover::after{
+    width: 100%;
+}
+
+nav .fa{
+    display:none;
+}
+
+@media(max-width: 700px){
+    .nav-links{
+        position: absolute;
+        background-color: steelblue;
+        height: 100vh;
+        width: 200px;
+        top:0;
+        left: -200px;
+        text-align: left;
+        z-index: 10;
+        transition: 1s;
+    }
+
+    .nav-links ul li{
+        display: block;
+    }
+
+    nav .fa{
+        display: block;
+        color:azure;
+        margin: 10px;
+        font-size: 22px;
+        cursor: pointer;
+        text-align: left;
+    }
+
+    .nav-links ul{
+        padding: 30px;
+    }
+}

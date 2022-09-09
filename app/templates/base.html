@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <head>
+        {% if title %}
+            <title>{{ title }} - nUWAy</title>
+        {% else %}
+            <title>nUWAy</title>
+        {% endif %}
+
+        <link rel = 'stylesheet' href = '../static/css/base.css'>
+        <link rel = 'stylesheet' href = '../static/css/home.css'>
+
+        <!-- To use bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- To use google font-->
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+    </head>
+    <body>
+        <!-- navbar -->
+        {% block navbar %}
+        <nav>
+            <!--add logo-->
+            <div class="nav-links" id="navlinks">
+                <i class="fa fa-times" onclick="closeMenu()"></i>
+                <ul>
+                    <li class="navbar"><a href="#home">Home</a></li>
+                    <li class="navbar"><a href="#events">Events</a></li>
+                    <li class="navbar"><a href="#media">Media</a></li>
+                    <li class="navbar"><a href="#galleries">Galleries</a></li>
+                    <li class="navbar"><a href="#signup">Sign-Up</a></li>
+                    <li class="navbar"><a href="#contact">Contact</a></li> 
+                </ul>
+                
+            </div>
+            <i class="fa fa-bars" onclick="openMenu()"></i>
+        </nav>
+        {% endblock %}
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </body>
+</html>
