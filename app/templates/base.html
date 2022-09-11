@@ -12,8 +12,8 @@
         {% endif %}
 
         <link rel = 'stylesheet' href = '../static/css/base.css'>
-        <link rel = 'stylesheet' href = '../static/css/home.css'>
 
+        
         <!-- To use bootstrap -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -23,37 +23,46 @@
         <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 
     </head>
+
     <body>
         <!-- navbar -->
         {% block navbar %}
-        <nav>
             <!--add logo-->
-            <div class="nav-links" id="navlinks">
+            <nav class="nav-links" id="nav-links">
                 <i class="fa fa-times" onclick="closeMenu()"></i>
                 <ul>
-                    <li class="navbar"><a href="#home">Home</a></li>
-                    <li class="navbar"><a href="#events">Events</a></li>
-                    <li class="navbar"><a href="#media">Media</a></li>
-                    <li class="navbar"><a href="#galleries">Galleries</a></li>
-                    <li class="navbar"><a href="#signup">Sign-Up</a></li>
-                    <li class="navbar"><a href="#contact">Contact</a></li> 
+                    <li class="navbar"><a href="{{ url_for('home') }}">Home</a></li>
+                    <li class="navbar"><a href="{{ url_for('events') }}">Events</a></li>
+                    <li class="navbar"><a href="{{ url_for('media') }}">Media</a></li>
+                    <li class="navbar"><a href="{{ url_for('contact') }}">Contact</a></li> 
                 </ul>
-                
-            </div>
-            <i class="fa fa-bars" onclick="openMenu()"></i>
-        </nav>
+                <i class="fa fa-bars" onclick="openMenu()"></i>
+            </nav>
+            
         {% endblock %}
 
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         {% endwith %}
 
         {% block content %}{% endblock %}
+
+        <script>
+            var navlinks=document.getElementsById("nav-links");
+
+            function openMenu(){
+                navlinks.style.left = '0';
+            }
+
+            function closeMenu(){
+                navlinks.style.left = '-200px';
+            }
+        </script>
     </body>
 </html>
