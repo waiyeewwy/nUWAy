@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="info" id="contact">
+    <div class="sec-header">Contact Us</div>
+
+        <div class="col">
+            <h5>Subscribe for newsletter</h5><br>
+            <form>
+                <input type="text" id="email" name="email" placeholder="Email">
+                <input type="submit" value="Subscribe">
+            </form>
+        </div>
+        <div class="col">
+            <h5>Be a part of us!</h5><br>
+            <form>
+                <input type="text" id="email" name="email" placeholder="Email">
+                <input type="submit" value="Sign Up">
+            </form>
+        </div>
+    
+        <div class="col" id="galleries">
+            <h5>Share your pictures!</h5><br>
+            <div class="galleries-col">
+                <form>
+                    <input type="image" alt="image">
+                    <br>
+                    <input type="submit" value="Uplaod">
+                </form>
+            </div>
+        </div>
+
+        <br>
+        <div class="col">
+            <form>
+                <h5>Share your thoughts!</h5><br>
+                <label for="feedback" style="font-size: 10px;">Feedback:</label>
+                <input type="text" id="feedback" name="feedback" placeholder="Write something...">
+                <br>
+                <label for="name" style="font-size: 10px;">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Anonymous" required>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <br><br>
+
+        <div>
+            <p class="smalltext">The University of Western Australia
+                <br>35 Stirling Highway, Crawley 6009 WA
+                <br>nuway@uwa.edu.au
+                <br>0123456789
+            </p>
+            <br>
+        </div>
+</section>
+
+{% endblock %}
