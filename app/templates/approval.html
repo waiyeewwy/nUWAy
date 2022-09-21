@@ -42,6 +42,47 @@
     {% endfor %}
 </div>
 
+<br><br><br><br><br>
+
+<h2 class="pagetitle">Galleries Approval</h2>
+
+<div class="container-holder">
+    <div class="container-fluid text-center" id="container">
+        <div class="row">
+            <div class="col-6 d-flex text-center">
+                <h6>Image</h6>
+            </div>
+            <div class="col-3 d-flex text-center">
+                <h6>Username</h6>
+            </div>
+            <div class="col-3 d-flex text-center">
+                <h6>Post on webpage</h6>
+            </div>
+        </div>
+    </div>
+    
+    {% for image in images %}
+
+    <div id="image.id" class="row">
+        {% if image.approved is sameas True %}
+        {% else %}
+        <div class="col-6 d-flex">
+            <p style="margin:auto;">{{image.img}}</p>
+        </div>
+        <div class="col-3 d-flex">
+            <p style="margin:auto;">{{image.name}}</p>
+        </div>
+        <div class="col-3 d-flex">
+            <p style="margin:auto">
+                <button class="btn btn-success" onclick="approveImage('{{image.id}}')">Post</button>
+                <button class="delete btn btn-danger" onclick="dismissImage('{{image.id}}')">Dismiss</button>
+            </p>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
 
 <script>
     /**
