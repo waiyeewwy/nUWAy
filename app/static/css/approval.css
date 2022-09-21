@@ -1,0 +1,21 @@
+.pagetitle {
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 30px;
+}
+
+.container-holder {
+	padding-left: 30px;
+	padding-right: 30px;
+}
+
+.container-fluid {
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 3px;
+}
+
+.row{
+    font-size: 10px;
+}

@@ -286,3 +286,7 @@ input[type=submit]:hover{
     bottom:0;
     padding: 10px;
 }
+
+button:hover{
+    cursor:pointer;
+}

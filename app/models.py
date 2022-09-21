@@ -1,20 +1,18 @@
-from app import db, login
+from app import db, login, app
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 
-# Each row in this table represent an Admin(Researcher) or a Superadmin
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64),unique=True)
     email = db.Column(db.String(128), index=True, unique=True)
     password_hash = db.Column(db.String(128))
 
-    #sessions = db.relationship('Session', backref='creator',lazy='dynamic')
 
     def __repr__(self):
-        return '<Id: {}, Username: {}, Email: {}>'.format(self.id, self.username, self.email)
+        return '<Id: {}, Email: {}>'.format(self.id, self.email)
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -26,3 +24,34 @@ class User(UserMixin, db.Model):
     def load_user(id):
         return User.query.get(int(id))
 
+class Feedback(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    feedback = db.Column(db.String(255))
+    name = db.Column(db.String(128))
+    approved = db.Column(db.Boolean)
+
+
+    def __repr__(self):
+        return '<id: {}, feedback: {}, name: {}, approved: {}>'\
+            .format(self.id, self.feedback, self.name, self.approved)
+
+class Image(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    img = db.Column(db.Text, unique=True, nullable=False)
+    name = db.Column(db.Text, nullable=False)
+    mimetype = db.Column(db.Text, nullable=False)
+    approved = db.Column(db.Boolean)
+
+    def __repr__(self):
+        return '<id: {}, img: {}, name: {}, mimetype: {}, approved: {}>'\
+            .format(self.id, self.img, self.name, self.mimetype, self.approved)
+
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128))
+    date = db.Column(db.String(128))
+    info = db.Column(db.String(255))
+
+    def __repr__(self):
+        return '<id: {}, name: {}, date: {}, info: {}}>'\
+            .format(self.id, self.name, self.date, self.info)
