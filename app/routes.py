@@ -3,39 +3,52 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user,login_required,logout_user
 from app.models import User
+from app.forms import LoginForm
 from werkzeug.urls import url_parse
 
 from sqlalchemy import func 
 from app.api.errors import bad_request
 
+
+# Home page
+#----------------------------------------------------------
 @app.route('/')
-@app.route('/home')
+@app.route('/home', methods=['GET'])
 def home():
     return render_template("home.html", home=True)
 
-@app.route('/events')
+
+# Upcoming event page
+#----------------------------------------------------------
+@app.route('/events', methods=['GET'])
 def events():
     return render_template("events.html", event=True)
 
-@app.route('/media')
+
+# Media page (news)
+#----------------------------------------------------------
+@app.route('/media', methods=['GET'])
 def media():
     pass
     return render_template("media.html", media=True)
 
-@app.route('/contact')
+
+# Contact us page
+#----------------------------------------------------------
+@app.route('/contact', methods=['GET'])
 def contact():
-<<<<<<< Updated upstream
-    return render_template("contact.html")
-=======
     return render_template("contact.html", contact=True)
+
 
 
 # Login for admin only
 #----------------------------------------------------------
 @app.route('/adminlogin', methods=['GET', 'POST'])
 def adminlogin():
+
     #return redirect(url_for('login'))
     return redirect(url_for('approval'))
+
 
 
 # View feedback and post approved feedback 
@@ -43,7 +56,9 @@ def adminlogin():
 @app.route('/approval', methods=['GET', 'POST'])
 @login_required
 def approval():
+
     return render_template("approval.html", approval=True)
+
 
 
 # For admin to post or delete events
@@ -51,7 +66,9 @@ def approval():
 @app.route('/updateevents', methods=['GET', 'POST'])
 @login_required
 def updateevents():
+
     return render_template("updateevents.html", upevent=True)
+
 
 
 # Logout
@@ -59,7 +76,9 @@ def updateevents():
 @app.route('/logout')
 def logout():
     logout_user()
+
     return redirect(url_for('home'))
+
 
 
 # Login/Sign In
@@ -83,4 +102,4 @@ def login():
             next_page = url_for('approval')
         return redirect(next_page)
     return render_template('adminlogin.html', title='Login for Admin', form=form)
->>>>>>> Stashed changes
+

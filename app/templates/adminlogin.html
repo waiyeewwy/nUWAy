@@ -1,0 +1,23 @@
+
+    <link rel = 'stylesheet' href = '../static/css/adminlogin.css'>
+
+    <form action="" method="post">
+        <div class="container">
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="email" required>
+        
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required>
+                
+            <button type="submit">Login</button>
+            
+            <button type="button" class="cancelbtn" onclick="back()">Back</a></button>
+            <!-- <span class="psw"><a href="#">Forgot password?</a></span> -->
+          </div>
+    </form>
+
+    <script>
+        function back(){
+            location.href = "{{ url_for('home') }}"
+        }
+    </script>

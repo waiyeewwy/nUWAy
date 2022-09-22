@@ -39,11 +39,6 @@
                     <li class="navbar active"><a href="{{ url_for('home') }}">Home</a></li>
                     {% else %}
                     <li class="navbar"><a href="{{ url_for('home') }}">Home</a></li>
-<<<<<<< Updated upstream
-                    <li class="navbar"><a href="{{ url_for('events') }}">Events</a></li>
-                    <li class="navbar"><a href="{{ url_for('media') }}">Media</a></li>
-                    <li class="navbar"><a href="{{ url_for('contact') }}">Contact</a></li> 
-=======
                     {% endif %}
 
                     {% if media is defined %}
@@ -66,7 +61,7 @@
                     
                     
                     <li class="navbar"><a href="{{ url_for('adminlogin') }}">Login (for admin)</a></li>
->>>>>>> Stashed changes
+
                 </ul>
                 <i class="fa fa-bars" onclick="openMenu()"></i>
             </div>
