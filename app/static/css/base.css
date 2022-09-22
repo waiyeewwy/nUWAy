@@ -7,12 +7,19 @@
     font-family: 'Noto Serif', serif;
 }
 
-nav{
+.nav-links{
+    font-size: 20px;
     background-color: steelblue;
     text-align: right;
     top: 0;
     width: 100%;
+    overflow: hidden;
+}
 
+
+.nav-links ul li.active{
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px; 
 }
 
 .nav-links ul{
@@ -22,7 +29,7 @@ nav{
 .nav-links ul li{
     list-style: none;
     display: inline-block;
-    padding: 8px 12px;
+    padding: 10px 10px;
     position: relative;
 }
 
