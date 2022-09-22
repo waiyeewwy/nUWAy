@@ -7,12 +7,19 @@
     font-family: 'Noto Serif', serif;
 }
 
-nav{
+.nav-links{
+    font-size: 20px;
     background-color: steelblue;
     text-align: right;
     top: 0;
     width: 100%;
+    overflow: hidden;
+}
 
+
+.nav-links ul li.active{
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px; 
 }
 
 .nav-links ul{
@@ -22,7 +29,7 @@ nav{
 .nav-links ul li{
     list-style: none;
     display: inline-block;
-    padding: 8px 12px;
+    padding: 10px 10px;
     position: relative;
 }
 
@@ -209,34 +216,22 @@ input[type=submit]:hover{
 
 .events{
     width:80%;
-    margin:auto;
+    padding: 20px 12px;
     text-align: center;
-    padding-top: 100px;
+    margin: auto;
 }
 
 .events-col{
-    flex-basis: auto;
-    border-radius: 10px;
+    flex-basis: 50%;
     border-style: solid;
     border-width: 2px;
     border-color: steelblue;
     margin-bottom: 5%;
     text-align: center;
     padding: 20px 12px;
-    width: 400px;
-    height: auto;
-    border-collapse: separate;
-    border-spacing: 15px;
+    border-radius:10px;
 }
 
-.events-col img{
-    width:100%;
-    border-radius: 10px;
-    width: auto;
-    height: auto;
-    max-width: 300px;
-    max-height: 200px;
-}
 
 .col{
     flex-basis: auto;
@@ -264,22 +259,15 @@ input[type=submit]:hover{
 }
 
 .feedback-col{
-    flex-basis:45%;
+    flex-basis:50%;
     border-radius:10px;
     margin-bottom:5%;
     text-align:left;
     background-color: beige;
-    padding:2px;
-    cursor:pointer;
+    padding:10px;
     display: flex;
 }
 
-.feedback-col img{
-    height:40px;
-    margin-left:5px;
-    margin-right: 30px;
-    border-radius: 50%;
-}
 
 .contact{
     position: fixed;

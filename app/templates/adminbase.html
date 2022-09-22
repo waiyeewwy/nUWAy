@@ -30,15 +30,30 @@
         <!-- navbar -->
         {% block navbar %}
             <!--add logo-->
-            <nav class="nav-links" id="nav-links">
+
+
+            <div class="nav-links" id="nav-links">
                 <i class="fa fa-times" onclick="closeMenu()"></i>
                 <ul>
+                    {% if approval is defined %}
+                    <li class="navbar active"><a href="{{ url_for('approval') }}">Pending Approval</a></li>
+                    {% else %}
                     <li class="navbar"><a href="{{ url_for('approval') }}">Pending Approval</a></li>
+                    {% endif %}
+                    
+                    {% if upevent is defined %}
+                    <li class="navbar active"><a href="{{ url_for('updateevents') }}">Update Events</a></li>
+                    {% else %}
                     <li class="navbar"><a href="{{ url_for('updateevents') }}">Update Events</a></li>
+                    {% endif %}
+                    
                     <li class="navbar"><a href="{{ url_for('logout') }}">Logout</a></li>
                 </ul>
                 <i class="fa fa-bars" onclick="openMenu()"></i>
-            </nav>
+            </div>
+
+
+
             
         {% endblock %}
 

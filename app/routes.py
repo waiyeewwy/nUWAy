@@ -15,14 +15,14 @@ from app.api.errors import bad_request
 @app.route('/')
 @app.route('/home', methods=['GET'])
 def home():
-    return render_template("home.html")
+    return render_template("home.html", home=True)
 
 
 # Upcoming event page
 #----------------------------------------------------------
 @app.route('/events', methods=['GET'])
 def events():
-    return render_template("events.html")
+    return render_template("events.html", event=True)
 
 
 # Media page (news)
@@ -30,21 +30,25 @@ def events():
 @app.route('/media', methods=['GET'])
 def media():
     pass
-    return render_template("media.html")
+    return render_template("media.html", media=True)
 
 
 # Contact us page
 #----------------------------------------------------------
 @app.route('/contact', methods=['GET'])
 def contact():
-    return render_template("contact.html")
+    return render_template("contact.html", contact=True)
+
 
 
 # Login for admin only
 #----------------------------------------------------------
 @app.route('/adminlogin', methods=['GET', 'POST'])
 def adminlogin():
-    return render_template("approval.html")
+
+    #return redirect(url_for('login'))
+    return redirect(url_for('approval'))
+
 
 
 # View feedback and post approved feedback 
@@ -52,7 +56,9 @@ def adminlogin():
 @app.route('/approval', methods=['GET', 'POST'])
 @login_required
 def approval():
-    return render_template("approval.html")
+
+    return render_template("approval.html", approval=True)
+
 
 
 # For admin to post or delete events
@@ -60,7 +66,9 @@ def approval():
 @app.route('/updateevents', methods=['GET', 'POST'])
 @login_required
 def updateevents():
-    return render_template("updateevents.html")
+
+    return render_template("updateevents.html", upevent=True)
+
 
 
 # Logout
@@ -68,7 +76,9 @@ def updateevents():
 @app.route('/logout')
 def logout():
     logout_user()
-    return render_template("home.html")
+
+    return redirect(url_for('home'))
+
 
 
 # Login/Sign In
@@ -92,3 +102,4 @@ def login():
             next_page = url_for('approval')
         return redirect(next_page)
     return render_template('adminlogin.html', title='Login for Admin', form=form)
+
