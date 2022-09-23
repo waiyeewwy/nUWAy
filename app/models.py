@@ -38,8 +38,8 @@ class Feedback(db.Model):
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     img = db.Column(db.Text, unique=True, nullable=False)
-    name = db.Column(db.Text, nullable=False)
-    mimetype = db.Column(db.Text, nullable=False)
+    name = db.Column(db.String(128), nullable=False)
+    mimetype = db.Column(db.String(128), nullable=False)
     approved = db.Column(db.Boolean)
 
     def __repr__(self):
@@ -55,3 +55,14 @@ class Event(db.Model):
     def __repr__(self):
         return '<id: {}, name: {}, date: {}, info: {}}>'\
             .format(self.id, self.name, self.date, self.info)
+
+
+class Jointeam(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(128), index=True, unique=True)
+    name = db.Column(db.String(128))
+    approved = db.Column(db.Boolean)
+
+    def __repr__(self):
+        return '<id: {}, name: {}, email: {}}>'\
+            .format(self.id, self.name, self.email)
