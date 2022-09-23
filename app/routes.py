@@ -2,8 +2,8 @@ from re import S
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user,login_required,logout_user
-from app.models import User
-from app.forms import LoginForm
+from app.models import User, Jointeam
+from app.forms import LoginForm, SignUpForm
 from werkzeug.urls import url_parse
 
 from sqlalchemy import func 
@@ -35,9 +35,15 @@ def media():
 
 # Contact us page
 #----------------------------------------------------------
-@app.route('/contact', methods=['GET'])
+@app.route('/contact', methods=['GET','POST'])
 def contact():
-    return render_template("contact.html", contact=True)
+    form = SignUpForm()
+    if form.validate_on_submit():
+        user = Jointeam(email=form.email.data.lower(), name=form.name.data, approved=False)
+        db.session.add(user)
+        db.session.commit()
+        flash('You have succesfully submitted your interest, our team will contact you by email shortly.')
+    return render_template('contact.html', title="Contact Us", form=form, contact=True)
 
 
 
@@ -45,19 +51,19 @@ def contact():
 #----------------------------------------------------------
 @app.route('/adminlogin', methods=['GET', 'POST'])
 def adminlogin():
-
+    
     #return redirect(url_for('login'))
     return redirect(url_for('approval'))
 
 
 
-# View feedback and post approved feedback 
+# View feedback/galleries/join team requests 
 #----------------------------------------------------------
 @app.route('/approval', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def approval():
-
-    return render_template("approval.html", approval=True)
+    requests = Jointeam.query.all()
+    return render_template("approval.html", approval=True, requests=requests)
 
 
 
