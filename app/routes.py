@@ -1,14 +1,13 @@
-from re import S
 from app import app, db
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user,login_required,logout_user
-from app.models import User, Jointeam
+from app.models import User, Jointeam, Event, Feedback
 from app.forms import LoginForm, SignUpForm
 from werkzeug.urls import url_parse
-
 from sqlalchemy import func 
 from app.api.errors import bad_request
 
+import json
 
 # Home page
 #----------------------------------------------------------
@@ -22,7 +21,8 @@ def home():
 #----------------------------------------------------------
 @app.route('/events', methods=['GET'])
 def events():
-    return render_template("events.html", event=True)
+    events = Event.query.all()
+    return render_template("events.html", events=events, event=True)
 
 
 # Media page (news)
@@ -70,10 +70,50 @@ def approval():
 # For admin to post or delete events
 #----------------------------------------------------------
 @app.route('/updateevents', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def updateevents():
+    if request.method == 'GET':
+        events = Event.query.all()
+        return render_template("updateevents.html", events=events, upevent=True)
+    else:
+        data = request.get_json() or {}
+        event = Event(
+            name=data['eventName'],
+            date=data['eventDate'],
+            info=data['eventInfo']
+        )
+        db.session.add(event)
+        db.session.commit()
 
-    return render_template("updateevents.html", upevent=True)
+        
+        # Return response
+        response = jsonify(event.to_dict())
+        response.status_code = 201 
+        response.headers['Location'] = url_for('events')
+        return response
+
+
+
+# Delete past event
+#----------------------------------------------------------
+@app.route('/deleteEvent', methods=['POST'])
+#@login_required
+def deleteEvent():
+    temp = request.get_json()
+    selectedEventId = json.loads(temp)
+
+    # Restrict access to superadmin only
+    #if current_user.email != "nuwayuwa@gmail.com":
+    #    return bad_request("Action not allowed")
+    
+    # Delete event from database
+    event = Event.query.get(selectedEventId)
+    db.session.delete(event)
+    db.session.commit()
+
+    return ('success')
+
+
 
 
 

@@ -4,30 +4,21 @@
 <section class="events" id="events">
     <div class="sec-header">Upcoming Events</div>
 
-        <div class="events-col">
-            <h2>Event 1</h2>
-            <p class="smalltext">
-                info...
-                <br><strong>Date:</strong> 1 Nov 2022 - 15 Nov 2022
-                <br><strong>Time:</strong>all day
-            </p>
+        {% for event in events %}
+        <div id="event.id" class="events-col">
+            <div>
+                <h2 style="margin:auto;">{{event.name}}</h2>
+            </div>
+            <div class="smalltext">
+                <p style="margin:auto;"><strong>Date:</strong> {{event.date}}</p>
+            </div>
+            <div class="smalltext">
+                <p style="margin:auto;"><strong>Info:</strong> {{event.info}}</p>
+            </div>
+
         </div>
-        <div class="events-col">
-            <h2>Event 2</h2>
-            <p class="smalltext">
-                info...
-                <br><strong>Date:</strong> 16 Nov 2022 - 30 Nov 2022
-                <br><strong>Time:</strong>all day
-            </p>
-        </div>
-        <div class="events-col">
-            <h2>Event 3</h2>
-            <p class="smalltext">
-                info...
-                <br><strong>Date:</strong> 1 Dec 2022 - 31 Dec 2022
-                <br><strong>Time:</strong>all day
-            </p>
-        </div>
+        {% endfor %}
+    </div>
         
 </section>
 {% endblock %}

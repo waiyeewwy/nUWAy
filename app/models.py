@@ -55,6 +55,15 @@ class Event(db.Model):
     def __repr__(self):
         return '<id: {}, name: {}, date: {}, info: {}}>'\
             .format(self.id, self.name, self.date, self.info)
+    
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'date': self.date,
+            'info': self.info
+        }
+        return data
 
 
 class Jointeam(db.Model):
