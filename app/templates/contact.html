@@ -3,32 +3,6 @@
 {% block content %}
 <section class="info" id="contact">
     <div class="sec-header">Contact Us</div>
-
-        <div class="col">
-            <h5>Be a part of us!</h5><br>
-            <form action="" method="POST">
-                {{ form.hidden_tag() }}
-                <div class="container">
-                    <p>
-                        <div class="label"> {{ form.email.label }}</div>
-                        {{ form.email }} <br>
-                        {% for error in form.email.errors %}
-                        <span style="color: red;"> [{{ error }}]</span>
-                        {% endfor %}
-                    </p>
-                    <p>
-                        <div class="label"> {{ form.name.label }}</div>
-                        {{ form.name }} <br>
-                        {% for error in form.name.errors %}
-                        <span style="color: red;"> [{{ error }}]</span>
-                        {% endfor %}
-                    </p>
-                    <p>
-                        <div onclick = 'display(test)' class = "submit"> {{ form.submit() }}</div>
-                    </p>
-                </div>
-            </form>
-        </div>
     
         <div class="col" id="galleries">
             <h5>Share your pictures!</h5><br>
@@ -45,13 +19,16 @@
         <div class="col">
             <form>
                 <h5>Share your thoughts!</h5><br>
+                <!-- Feedback -->
                 <label for="feedback" style="font-size: 10px;">Feedback:</label>
                 <input type="text" id="feedback" name="feedback" placeholder="Write something...">
                 <br>
+                <!-- Name -->
                 <label for="name" style="font-size: 10px;">Name:</label>
                 <input type="text" id="name" name="name" placeholder="Anonymous" required>
                 <br>
-                <input type="submit" value="Submit">
+                <!-- Submit button -->
+                <button type="submit" onclick="submit()">Submit</button>
             </form>
         </div>
         <br><br>
@@ -65,5 +42,54 @@
             <br>
         </div>
 </section>
+
+
+<script>
+    function getFeedback(){
+        var feedback = document.getElementById('feedback').value
+        return feedback
+    }
+
+    function getName(){
+        var name = document.getElementById('name').value
+        return name
+    }
+
+    function submit(){
+        // retrieve form data
+        var feedback = getFeedback()
+        var name = getName()
+        data = {
+            feedback: feedback,
+            name: name
+        }
+
+        // submitting data
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+            if (xhttp.readyState === XMLHttpRequest.DONE) {
+                const status = xhttp.status;
+                if (status === 0 || (status >= 200 && status < 400)) {
+                    // The request has been completed successfully
+                    console.log('Submitted!')
+                    console.log(xhttp.responseText);
+                } else {
+                    console.log(xhttp.responseText);
+                    // Oh no! There has been an error with the request!
+                }
+            }
+        }
+        //xhttp.open('POST', '/contact', true);
+        //xhttp.setRequestHeader('Content-Type', 'application/json');
+        //xhttp.send(JSON.stringify(data));
+
+        $.ajax({
+            url: 'feedback',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data)
+        })
+    }
+</script>
 
 {% endblock %}

@@ -33,17 +33,73 @@ def media():
     return render_template("media.html", media=True)
 
 
-# Contact us page
+
+# Submit feedback
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    data = request.get_json() or {}
+    # check data
+    if 'feedback' not in data:
+        return bad_request('Must include feedback')
+
+    # insert into feedback table
+    fb = Feedback(
+        feedback = data['feedback'],
+        name = data['name'],
+        approved = False
+    )
+    db.session.add(fb)
+    db.session.commit()
+    flash('Thanks for your feedback!')
+
+    # return response
+    response = jsonify(fb.to_dict())
+    response.status_code = 201 
+    response.headers['Location'] = url_for('approval')
+    return response
+
+
+
+# Sign up to join team
 #----------------------------------------------------------
-@app.route('/contact', methods=['GET','POST'])
-def contact():
+@app.route('/signup', methods=['GET','POST'])
+def signup():
     form = SignUpForm()
     if form.validate_on_submit():
         user = Jointeam(email=form.email.data.lower(), name=form.name.data, approved=False)
         db.session.add(user)
         db.session.commit()
         flash('You have succesfully submitted your interest, our team will contact you by email shortly.')
-    return render_template('contact.html', title="Contact Us", form=form, contact=True)
+    return render_template("signup.html", form=form, signup=True)
+
+
+# Contact us page
+#----------------------------------------------------------
+@app.route('/contact', methods=['GET','POST'])
+def contact():
+    if request.method == 'GET':
+        return render_template('contact.html', title="Contact Us", contact=True)
+    else: 
+        data = request.get_json() or {}
+        # check data
+        if 'feedback' not in data:
+            return bad_request('Must include feedback')
+
+        # insert into feedback table
+        fb = Feedback(
+            feedback = data['feedback'],
+            name = data['name'],
+            approved = False
+        )
+        db.session.add(fb)
+        db.session.commit()
+        flash('Thanks for your feedback!')
+
+        # return response
+        response = jsonify(fb.to_dict())
+        response.status_code = 201 
+        response.headers['Location'] = url_for('approval')
+        return response
 
 
 
@@ -65,6 +121,7 @@ def approval():
     requests = Jointeam.query.all()
     feedbacks = Feedback.query.all()
     return render_template("approval.html", approval=True, requests=requests, feedbacks=feedbacks)
+
 
 
 
@@ -90,7 +147,7 @@ def updateevents():
         # Return response
         response = jsonify(event.to_dict())
         response.status_code = 201 
-        response.headers['Location'] = url_for('events')
+        response.headers['Location'] = url_for('updateevents')
         return response
 
 

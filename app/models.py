@@ -35,6 +35,15 @@ class Feedback(db.Model):
         return '<id: {}, feedback: {}, name: {}, approved: {}>'\
             .format(self.id, self.feedback, self.name, self.approved)
 
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'feedback': self.feedback,
+            'name': self.name,
+            'approved': self.approved
+        }
+        return data
+
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     img = db.Column(db.Text, unique=True, nullable=False)
