@@ -2,5 +2,130 @@
 
 {% block content %}
 
+<h2 class="pagetitle">Events</h2>
+
+<div class="container-holder">
+    <form class="container-fluid update">
+        <label for="newevent">Event Name:</label>
+        <input class="smalltext" type="text" id="newevent" name="newevent" placeholder="Event name">
+        <br>
+        <label for="neweventdate">Date:</label>
+        <input class="smalltext" type="text" id="neweventdate" name="neweventdate" placeholder="DD/MM/YY - DD/MM/YY" required>
+        <br>
+        <label for="neweventinfo">Info:</label>
+        <input class="smalltext" type="text" id="neweventinfo" name="neweventinfo" placeholder="Event description" required>
+        <br>
+        <button class="btn btn-primary" style="font-size:10px" onclick="addEvent()">Add</button>
+    </form>
+</div>
+
+
+<div class="container-holder">
+    <div class="container-fluid text-center" id="container">
+        <div class="row table-header">
+            <div class="col-3 d-flex text-center">
+                <h6 style="margin:auto">Event</h6>
+            </div>
+            <div class="col-3 d-flex text-center">
+                <h6 style="margin:auto">Date</h6>
+            </div>
+            <div class="col-5 d-flex text-center">
+                <h6 style="margin:auto">Info</h6>
+            </div>
+            <div class="col-1 d-flex text-center">
+                <h6 style="margin:auto">Dismiss</h6>
+            </div>
+        </div>
+    
+
+        {% for event in events %}
+
+        <div id={{event.id}} class="row">
+            <div class="col-3 d-flex">
+                <p style="margin:auto">{{ event.name }}</p>
+            </div>
+            <div class="col-3 d-flex">
+                <p style="margin:auto">{{ event.date }}</p>
+            </div>
+            <div class="col-5 d-flex">
+                <p style="margin:auto">{{ event.info }}</p>
+            </div>
+            <div class="col-1 d-flex">
+                <p style="margin:auto">
+                    <button class="btn btn-danger" onclick="deleteEvent('{{event.id}}')" style="font-size:10px">Dismiss</button>
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+        
+
+<script>
+    function getEventName(){
+        var eventName = document.getElementById('newevent').value
+        return eventName
+    }
+
+    function getEventDate(){
+        var eventDate = document.getElementById('neweventdate').value
+        return eventDate
+    }
+
+    function getEventInfo(){
+        var eventInfo = document.getElementById('neweventinfo').value
+        return eventInfo
+    }
+
+    function addEvent(){
+        var eventName = getEventName()
+        var eventDate = getEventDate()
+        var eventInfo = getEventInfo()
+
+        data = {
+            eventName : eventName,
+            eventDate : eventDate,
+            eventInfo : eventInfo
+        }
+        
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+
+            if (xhttp.readyState === XMLHttpRequest.DONE) {
+                const status = xhttp.status;
+                if (status === 0 || (status >= 200 && status < 400)) {
+                    // The request has been completed successfully
+                    console.log('Submitted!')
+                    console.log(xhttp.responseText);
+                } else {
+                    console.log(xhttp.responseText);
+                    // Oh no! There has been an error with the request!
+                }
+            }
+        }
+        xhttp.open('POST', '/updateevents', true);
+        xhttp.setRequestHeader('Content-Type', 'application/json');
+        xhttp.send(JSON.stringify(data));
+
+    }
+
+
+    function deleteEvent(eventid){
+
+        //remove event on front end using DOM
+        removeEvent = document.getElementById(eventid)
+        parent = document.getElementById('container')
+        parent.removeChild(removeEvent)
+
+        var target = JSON.stringify(eventid)
+        $.ajax({
+            url: 'deleteEvent',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(target)
+        })
+    }
+
+</script>
 
 {% endblock %}

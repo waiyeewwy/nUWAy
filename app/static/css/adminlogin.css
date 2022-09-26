@@ -2,6 +2,7 @@
 
 body{
     font-family: 'Noto Serif', serif;
+    font-size: 12px;
 }
 
 form {
@@ -17,6 +18,7 @@ input[type=text], input[type=password] {
   box-sizing: border-box;
 }
 
+/**
 button {
   background-color: lightseagreen;
   color: white;
@@ -26,6 +28,7 @@ button {
   cursor: pointer;
   width: auto;
 }
+*/
 
 button:hover {
   opacity: 0.8;
@@ -57,4 +60,44 @@ span.psw {
   .cancelbtn {
      width: 100%;
   }
+}
+
+.update{
+  flex-basis: auto;
+  padding: 20px;
+  margin: 20px;
+}
+
+.submit-btn{
+  background-color:steelblue;
+  color: white;
+}
+
+.pagetitle {
+	text-align: center;
+	margin-top: 15px;
+	margin-bottom: 30px;
+}
+
+.container-holder {
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+}
+
+.container-fluid {
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 3px;
+}
+
+.row{
+  font-size: 12px;
+	padding: 6px;
+}
+
+.table-header{
+  background-color:beige;
+  border-bottom: 2px solid black;
 }
