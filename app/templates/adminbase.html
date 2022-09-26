@@ -49,6 +49,12 @@
             <div class="nav-links" id="nav-links">
                 <i class="fa fa-times" onclick="closeMenu()"></i>
                 <ul>
+                    {% if viewteam is defined %}
+                    <li class="navbar active"><a href="{{ url_for('viewteam') }}">View Team</a></li>
+                    {% else %}
+                    <li class="navbar"><a href="{{ url_for('viewteam') }}">View Team</a></li>
+                    {% endif %}
+
                     {% if approval is defined %}
                     <li class="navbar active"><a href="{{ url_for('approval') }}">Pending Approval</a></li>
                     {% else %}

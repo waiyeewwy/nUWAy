@@ -60,6 +60,16 @@ def feedback():
 
 
 
+
+# View Team
+#----------------------------------------------------------
+@app.route('/viewteam', methods=['GET'])
+def viewteam():
+    mates = Jointeam.query.all()
+    return render_template("viewteam.html", mates=mates, viewteam=True)
+
+
+
 # Sign up to join team
 #----------------------------------------------------------
 @app.route('/signup', methods=['GET','POST'])
@@ -195,7 +205,7 @@ def joinTeam():
 # Dismiss join team request
 #----------------------------------------------------------
 @app.route('/denyJoinTeam', methods=['GET','POST'])
-@login_required
+#@login_required
 def denyJoinTeam():
     temp = request.get_json()
     id = json.loads(temp)

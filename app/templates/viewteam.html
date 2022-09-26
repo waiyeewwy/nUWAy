@@ -1,0 +1,41 @@
+{% extends "adminbase.html" %}
+
+{% block content %}
+
+<h2 class="pagetitle">Team</h2>
+
+<div class="container-holder">
+    <div class="container-fluid text-center" id="container">
+        <div class="row">
+            <div class="col-4 d-flex text-center">
+                <h6 style="margin:auto">Id</h6>
+            </div>
+            <div class="col-4 d-flex text-center">
+                <h6 style="margin:auto">Name</h6>
+            </div>
+            <div class="col-4 d-flex text-center">
+                <h6 style="margin:auto">Email</h6>
+            </div>
+        </div>
+    </div>
+    
+    {% for mate in mates %}
+
+    <div id="mate.id" class="row">
+        {% if mate.approved is sameas True %}
+        <div class="col-6 d-flex">
+            <p style="margin:auto;">{{mate.id}}</p>
+        </div>
+        <div class="col-3 d-flex">
+            <p style="margin:auto;">{{mate.name}}</p>
+        </div>
+        <div class="col-3 d-flex">
+            <p style="margin:auto;">{{mate.email}}</p>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}
