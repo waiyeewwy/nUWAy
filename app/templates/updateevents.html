@@ -42,17 +42,17 @@
 
         <div id={{event.id}} class="row">
             <div class="col-3 d-flex">
-                <p style="margin:auto;">{{ event.name }}</p>
+                <p style="margin:auto">{{ event.name }}</p>
             </div>
             <div class="col-3 d-flex">
-                <p style="margin:auto;">{{ event.date }}</p>
+                <p style="margin:auto">{{ event.date }}</p>
             </div>
             <div class="col-5 d-flex">
-                <p style="margin:auto;">{{ event.info }}</p>
+                <p style="margin:auto">{{ event.info }}</p>
             </div>
             <div class="col-1 d-flex">
-                <p style="margin:auto;">
-                    <button class="btn btn-danger" style="font-size:10px;" onclick="dismissEvent('{{event.id}}')">Dismiss</button>
+                <p style="margin:auto">
+                    <button class="btn btn-danger" onclick="deleteEvent('{{event.id}}')" style="font-size:10px">Dismiss</button>
                 </p>
             </div>
         </div>
@@ -110,7 +110,7 @@
     }
 
 
-    function dismissEvent(eventid){
+    function deleteEvent(eventid){
 
         //remove event on front end using DOM
         removeEvent = document.getElementById(eventid)

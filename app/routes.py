@@ -63,7 +63,8 @@ def adminlogin():
 #@login_required
 def approval():
     requests = Jointeam.query.all()
-    return render_template("approval.html", approval=True, requests=requests)
+    feedbacks = Feedback.query.all()
+    return render_template("approval.html", approval=True, requests=requests, feedbacks=feedbacks)
 
 
 
@@ -96,21 +97,20 @@ def updateevents():
 
 # Delete past event
 #----------------------------------------------------------
-@app.route('/deleteEvent', methods=['POST'])
+@app.route('/deleteEvent', methods=['GET','POST'])
 #@login_required
 def deleteEvent():
     temp = request.get_json()
-    selectedEventId = json.loads(temp)
+    eventId = json.loads(temp)
 
     # Restrict access to superadmin only
     #if current_user.email != "nuwayuwa@gmail.com":
     #    return bad_request("Action not allowed")
     
     # Delete event from database
-    event = Event.query.get(selectedEventId)
+    event = Event.query.get(eventId)
     db.session.delete(event)
     db.session.commit()
-
     return ('success')
 
 
