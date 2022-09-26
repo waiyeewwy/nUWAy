@@ -34,6 +34,33 @@ def media():
 
 
 
+# Submit feedback
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    data = request.get_json() or {}
+    # check data
+    if 'feedback' not in data:
+        return bad_request('Must include feedback')
+
+    # insert into feedback table
+    fb = Feedback(
+        feedback = data['feedback'],
+        name = data['name'],
+        approved = False
+    )
+    db.session.add(fb)
+    db.session.commit()
+    flash('Thanks for your feedback!')
+
+    # return response
+    response = jsonify(fb.to_dict())
+    response.status_code = 201 
+    response.headers['Location'] = url_for('approval')
+    return response
+
+
+
+
 # View Team
 #----------------------------------------------------------
 @app.route('/viewteam', methods=['GET'])
@@ -43,17 +70,46 @@ def viewteam():
 
 
 
-# Contact us page
+# Sign up to join team
 #----------------------------------------------------------
-@app.route('/contact', methods=['GET','POST'])
-def contact():
+@app.route('/signup', methods=['GET','POST'])
+def signup():
     form = SignUpForm()
     if form.validate_on_submit():
         user = Jointeam(email=form.email.data.lower(), name=form.name.data, approved=False)
         db.session.add(user)
         db.session.commit()
         flash('You have succesfully submitted your interest, our team will contact you by email shortly.')
-    return render_template('contact.html', title="Contact Us", form=form, contact=True)
+    return render_template("signup.html", form=form, signup=True)
+
+
+# Contact us page
+#----------------------------------------------------------
+@app.route('/contact', methods=['GET','POST'])
+def contact():
+    if request.method == 'GET':
+        return render_template('contact.html', title="Contact Us", contact=True)
+    else: 
+        data = request.get_json() or {}
+        # check data
+        if 'feedback' not in data:
+            return bad_request('Must include feedback')
+
+        # insert into feedback table
+        fb = Feedback(
+            feedback = data['feedback'],
+            name = data['name'],
+            approved = False
+        )
+        db.session.add(fb)
+        db.session.commit()
+        flash('Thanks for your feedback!')
+
+        # return response
+        response = jsonify(fb.to_dict())
+        response.status_code = 201 
+        response.headers['Location'] = url_for('approval')
+        return response
 
 
 
@@ -75,6 +131,7 @@ def approval():
     requests = Jointeam.query.all()
     feedbacks = Feedback.query.all()
     return render_template("approval.html", approval=True, requests=requests, feedbacks=feedbacks)
+
 
 
 
@@ -100,7 +157,7 @@ def updateevents():
         # Return response
         response = jsonify(event.to_dict())
         response.status_code = 201 
-        response.headers['Location'] = url_for('events')
+        response.headers['Location'] = url_for('updateevents')
         return response
 
 
@@ -125,6 +182,41 @@ def deleteEvent():
 
 
 
+# Join team
+#----------------------------------------------------------
+@app.route('/joinTeam', methods=['GET','POST'])
+#@login_required
+def joinTeam():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    # Restrict access to superadmin only
+    #if current_user.email != "nuwayuwa@gmail.com":
+    #    return bad_request("Action not allowed")
+
+    # Add people into team
+    target = User.query.get(id)
+    target.approved = True
+    db.session.commit()
+    
+    return redirect(url_for('approval'))
+
+
+# Dismiss join team request
+#----------------------------------------------------------
+@app.route('/denyJoinTeam', methods=['GET','POST'])
+#@login_required
+def denyJoinTeam():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    # delete user in database
+    target = User.query.get(id)
+    db.session.delete(target)
+    db.session.commit()
+    
+    return redirect(url_for('approval'))
+
 
 
 # Logout
@@ -132,7 +224,6 @@ def deleteEvent():
 @app.route('/logout')
 def logout():
     logout_user()
-
     return redirect(url_for('home'))
 
 
@@ -141,7 +232,6 @@ def logout():
 #----------------------------------------------------------
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
-
 def login():
 
     if current_user.is_authenticated:

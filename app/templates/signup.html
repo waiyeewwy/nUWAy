@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="info" id="contact">
+    <div class="sec-header">Join Our Team</div>
+
+        <div class="col">
+            <h5>Be a part of us!</h5><br>
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="container">
+                    <p>
+                        <div class="label"> {{ form.email.label }}</div>
+                        {{ form.email }} <br>
+                        {% for error in form.email.errors %}
+                        <span style="color: red;"> [{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        <div class="label"> {{ form.name.label }}</div>
+                        {{ form.name }} <br>
+                        {% for error in form.name.errors %}
+                        <span style="color: red;"> [{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <p>
+                        <div onclick = 'display(test)' class = "submit"> {{ form.submit() }}</div>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
