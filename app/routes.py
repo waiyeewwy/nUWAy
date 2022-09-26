@@ -172,6 +172,41 @@ def deleteEvent():
 
 
 
+# Join team
+#----------------------------------------------------------
+@app.route('/joinTeam', methods=['GET','POST'])
+#@login_required
+def joinTeam():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    # Restrict access to superadmin only
+    #if current_user.email != "nuwayuwa@gmail.com":
+    #    return bad_request("Action not allowed")
+
+    # Add people into team
+    target = User.query.get(id)
+    target.approved = True
+    db.session.commit()
+    
+    return redirect(url_for('approval'))
+
+
+# Dismiss join team request
+#----------------------------------------------------------
+@app.route('/denyJoinTeam', methods=['GET','POST'])
+@login_required
+def denyJoinTeam():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    # delete user in database
+    target = User.query.get(id)
+    db.session.delete(target)
+    db.session.commit()
+    
+    return redirect(url_for('approval'))
+
 
 
 # Logout
@@ -179,7 +214,6 @@ def deleteEvent():
 @app.route('/logout')
 def logout():
     logout_user()
-
     return redirect(url_for('home'))
 
 
@@ -188,7 +222,6 @@ def logout():
 #----------------------------------------------------------
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
-
 def login():
 
     if current_user.is_authenticated:
