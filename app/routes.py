@@ -33,6 +33,16 @@ def media():
     return render_template("media.html", media=True)
 
 
+
+# View Team
+#----------------------------------------------------------
+@app.route('/viewteam', methods=['GET'])
+def viewteam():
+    mates = Jointeam.query.all()
+    return render_template("viewteam.html", mates=mates, viewteam=True)
+
+
+
 # Contact us page
 #----------------------------------------------------------
 @app.route('/contact', methods=['GET','POST'])
