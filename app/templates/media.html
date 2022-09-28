@@ -28,32 +28,21 @@
 </section>
 
 <section class="feedback" id="feedback">
-    <div class="sec-header">From our passengers</div>
+    <div class="sec-header">From Our Passengers</div>
 
-        <div class="feedback-col">
+    {% for feedback in feedbacks %}
+        {% if feedback.approved is sameas True %}
+        <div id="feedback.id" class="feedback-col">
             <div>
-                <p class="smalltext">comments abc encdewioceoiwj cwojcdieow ceiwjc eijdwo edwn c oeidj oweixnowencoi</p>
-                <h4>AAA</h4>
+                <p style="margin:auto">{{ feedback.feedback }} - </p>
+            </div>
+            <div class="smalltext">
+                <p style="margin:auto">( {{ feedback.name }} )</p>
             </div>
         </div>
-        <div class="feedback-col">
-            <div>
-                <p class="smalltext">comments abc encdewioceoiwj cwojcdieow ceiwjc eijdwo edwn c oeidj oweixnowencoi</p>
-                <h4>BBB</h4>
-            </div>
-        </div>
-        <div class="feedback-col">
-            <div>
-                <p class="smalltext">comments abc encdewioceoiwj cwojcdieow ceiwjc eijdwo edwn c oeidj oweixnowencoi</p>
-                <h4>BBB</h4>
-            </div>
-        </div>
-        <div class="feedback-col">
-            <div>
-                <p class="smalltext">comments abc encdewioceoiwj cwojcdieow ceiwjc eijdwo edwn c oeidj oweixnowencoi</p>
-                <h4>BBB</h4>
-            </div>
-        </div>
+        {% endif %}
+    {% endfor %}
+</div>
     
 </section>
 {% endblock %}

@@ -19,3 +19,9 @@ class SignUpForm(FlaskForm):
         user = Jointeam.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('You have already signed up.')
+
+
+class FeedbackForm(FlaskForm):
+    feedback = StringField('Feedback', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    submit = SubmitField('Submit')

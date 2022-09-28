@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user,login_required,logout_user
 from app.models import User, Jointeam, Event, Feedback
-from app.forms import LoginForm, SignUpForm
+from app.forms import LoginForm, SignUpForm, FeedbackForm
 from werkzeug.urls import url_parse
 from sqlalchemy import func 
 from app.api.errors import bad_request
@@ -29,35 +29,8 @@ def events():
 #----------------------------------------------------------
 @app.route('/media', methods=['GET'])
 def media():
-    pass
-    return render_template("media.html", media=True)
-
-
-
-# Submit feedback
-@app.route('/feedback', methods=['POST'])
-def feedback():
-    data = request.get_json() or {}
-    # check data
-    if 'feedback' not in data:
-        return bad_request('Must include feedback')
-
-    # insert into feedback table
-    fb = Feedback(
-        feedback = data['feedback'],
-        name = data['name'],
-        approved = False
-    )
-    db.session.add(fb)
-    db.session.commit()
-    flash('Thanks for your feedback!')
-
-    # return response
-    response = jsonify(fb.to_dict())
-    response.status_code = 201 
-    response.headers['Location'] = url_for('approval')
-    return response
-
+    feedbacks = Feedback.query.all()
+    return render_template("media.html", media=True, feedbacks=feedbacks)
 
 
 
@@ -87,30 +60,16 @@ def signup():
 #----------------------------------------------------------
 @app.route('/contact', methods=['GET','POST'])
 def contact():
-    if request.method == 'GET':
-        return render_template('contact.html', title="Contact Us", contact=True)
-    else: 
-        data = request.get_json() or {}
-        # check data
-        if 'feedback' not in data:
-            return bad_request('Must include feedback')
-
-        # insert into feedback table
-        fb = Feedback(
-            feedback = data['feedback'],
-            name = data['name'],
-            approved = False
-        )
-        db.session.add(fb)
+    form = FeedbackForm()
+    if form.validate_on_submit():
+        feedback = Feedback(feedback=form.feedback.data, name=form.name.data, approved=False)
+        db.session.add(feedback)
         db.session.commit()
-        flash('Thanks for your feedback!')
+        flash('You have succesfully submitted your feedback.')
 
-        # return response
-        response = jsonify(fb.to_dict())
-        response.status_code = 201 
-        response.headers['Location'] = url_for('approval')
-        return response
-
+    return render_template('contact.html', title="Contact Us", form=form, contact=True)
+    
+    
 
 
 # Login for admin only
@@ -231,6 +190,49 @@ def leaveTeam():
     db.session.commit()
     
     return redirect(url_for('viewteam'))
+
+
+
+# Approve feedback to post on webpage
+#----------------------------------------------------------
+@app.route('/approveFeedback', methods=['GET','POST'])
+#@login_required
+def approveFeedback():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    # Restrict access to superadmin only
+    #if current_user.email != "nuwayuwa@gmail.com":
+    #    return bad_request("Action not allowed")
+
+    # Add people into team
+    target = Feedback.query.get(id)
+    target.approved = True
+    db.session.commit()
+
+    requests = Jointeam.query.all()
+    feedbacks = Feedback.query.all()
+    return render_template("approval.html",approval=True, requests=requests, feedbacks=feedbacks)
+    return redirect(url_for('approval'))
+
+
+
+# Dismiss feedback
+#----------------------------------------------------------
+@app.route('/dismissFeedback', methods=['GET','POST'])
+#@login_required
+def dismissFeedback():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    # delete user in database
+    target = Feedback.query.get(id)
+    db.session.delete(target)
+    db.session.commit()
+    
+    return redirect(url_for('approval'))
+
+
 
 # Logout
 #----------------------------------------------------------
