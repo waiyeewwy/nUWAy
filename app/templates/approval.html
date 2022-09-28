@@ -6,7 +6,7 @@
 <h2 class="pagetitle">Feedback Approval</h2>
 
 <div class="container-holder">
-    <div class="container-fluid text-center" id="container">
+    <div class="container-fluid text-center" id="feedbackcontainer">
         <div class="row">
             <div class="col-6 d-flex text-center">
                 <h6 style="margin:auto">Feedback</h6>
@@ -18,28 +18,29 @@
                 <h6 style="margin:auto">Post on webpage</h6>
             </div>
         </div>
-    </div>
     
-    {% for feedback in feedbacks %}
+    
+        {% for feedback in feedbacks %}
 
-    <div id="feedback.id" class="row">
-        {% if feedback.approved is sameas True %}
-        {% else %}
-        <div class="col-6 d-flex">
-            <p style="margin:auto;">{{feedback.feeback}}</p>
+        <div id={{feedback.id}} class="row">
+            {% if feedback.approved is sameas True %}
+            {% else %}
+            <div class="col-6 d-flex">
+                <p style="margin:auto;">{{feedback.feeback}}</p>
+            </div>
+            <div class="col-3 d-flex">
+                <p style="margin:auto;">{{feedback.name}}</p>
+            </div>
+            <div class="col-3 d-flex">
+                <p style="margin:auto">
+                    <button class="btn btn-success" style="font-size:10px" onclick="approveFeedback('{{feedback.id}}')">Post</button>
+                    <button class="btn btn-danger" style="font-size:10px" onclick="dismissFeedback('{{feedback.id}}')">Dismiss</button>
+                </p>
+            </div>
+            {% endif %}
         </div>
-        <div class="col-3 d-flex">
-            <p style="margin:auto;">{{feedback.name}}</p>
-        </div>
-        <div class="col-3 d-flex">
-            <p style="margin:auto">
-                <button class="btn btn-success" style="font-size:10px" onclick="approveFeedback('{{feedback.id}}')">Post</button>
-                <button class="btn btn-danger" style="font-size:10px" onclick="dismissFeedback('{{feedback.id}}')">Dismiss</button>
-            </p>
-        </div>
-        {% endif %}
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 
 <br><br><br><br><br>
@@ -47,7 +48,7 @@
 <h2 class="pagetitle">Galleries Approval</h2>
 
 <div class="container-holder">
-    <div class="container-fluid text-center" id="container">
+    <div class="container-fluid text-center" id="galleriescontainer">
         <div class="row">
             <div class="col-6 d-flex text-center">
                 <h6 style="margin:auto">Image</h6>
@@ -59,28 +60,29 @@
                 <h6 style="margin:auto">Post on webpage</h6>
             </div>
         </div>
-    </div>
     
-    {% for image in images %}
+    
+        {% for image in images %}
 
-    <div id="image.id" class="row">
-        {% if image.approved is sameas True %}
-        {% else %}
-        <div class="col-6 d-flex">
-            <p style="margin:auto;">{{image.img}}</p>
+        <div id={{image.id}} class="row">
+            {% if image.approved is sameas True %}
+            {% else %}
+            <div class="col-6 d-flex">
+                <p style="margin:auto;">{{image.img}}</p>
+            </div>
+            <div class="col-3 d-flex">
+                <p style="margin:auto;">{{image.name}}</p>
+            </div>
+            <div class="col-3 d-flex">
+                <p style="margin:auto">
+                    <button class="btn btn-success" style="font-size:10px" onclick="approveImage('{{image.id}}')">Post</button>
+                    <button class="btn btn-danger" style="font-size:10px" onclick="dismissImage('{{image.id}}')">Dismiss</button>
+                </p>
+            </div>
+            {% endif %}
         </div>
-        <div class="col-3 d-flex">
-            <p style="margin:auto;">{{image.name}}</p>
-        </div>
-        <div class="col-3 d-flex">
-            <p style="margin:auto">
-                <button class="btn btn-success" style="font-size:10px" onclick="approveImage('{{image.id}}')">Post</button>
-                <button class="btn btn-danger" style="font-size:10px" onclick="dismissImage('{{image.id}}')">Dismiss</button>
-            </p>
-        </div>
-        {% endif %}
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 
 
@@ -90,7 +92,7 @@
 <h2 class="pagetitle">Sign Up Request Approval</h2>
 
 <div class="container-holder">
-    <div class="container-fluid text-center" id="container">
+    <div class="container-fluid text-center" id="signupcontainer">
         <div class="row">
             <div class="col-4 d-flex text-center">
                 <h6 style="margin:auto">Name</h6>
@@ -102,28 +104,29 @@
                 <h6 style="margin:auto">Review</h6>
             </div>
         </div>
-    </div>
     
-    {% for request in requests %}
+    
+        {% for request in requests %}
 
-    <div id="request.id" class="row">
-        {% if request.approved is sameas True %}
-        {% else %}
-        <div class="col-4 d-flex">
-            <p style="margin:auto;">{{request.name}}</p>
+        <div id={{request.id}} class="row">
+            {% if request.approved is sameas True %}
+            {% else %}
+            <div class="col-4 d-flex">
+                <p style="margin:auto;">{{request.name}}</p>
+            </div>
+            <div class="col-4 d-flex">
+                <p style="margin:auto;">{{request.email}}</p>
+            </div>
+            <div class="col-4 d-flex">
+                <p style="margin:auto">
+                    <button class="btn btn-success" style="font-size:10px" onclick="approveRequest('{{request.id}}')">Join Team</button>
+                    <button class="btn btn-danger" style="font-size:10px" onclick="dismissRequest('{{request.id}}')">Dismiss</button>
+                </p>
+            </div>
+            {% endif %}
         </div>
-        <div class="col-4 d-flex">
-            <p style="margin:auto;">{{request.email}}</p>
-        </div>
-        <div class="col-4 d-flex">
-            <p style="margin:auto">
-                <button class="btn btn-success" style="font-size:10px" onclick="approveRequest('{{request.id}}')">Join Team</button>
-                <button class="btn btn-danger" style="font-size:10px" onclick="dismissRequest('{{request.id}}')">Dismiss</button>
-            </p>
-        </div>
-        {% endif %}
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 
 
@@ -164,7 +167,7 @@
     function approveRequest(userid){
         //removing user on front end using DOM
         removeUser = document.getElementById(userid)
-        parent = document.getElementById('container')
+        parent = document.getElementById('signupcontainer')
         parent.removeChild(removeUser)
 
         var target = JSON.stringify(userid)
