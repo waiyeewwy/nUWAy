@@ -195,7 +195,7 @@ def joinTeam():
     #    return bad_request("Action not allowed")
 
     # Add people into team
-    target = User.query.get(id)
+    target = Jointeam.query.get(id)
     target.approved = True
     db.session.commit()
     
@@ -211,13 +211,26 @@ def denyJoinTeam():
     id = json.loads(temp)
 
     # delete user in database
-    target = User.query.get(id)
+    target = Jointeam.query.get(id)
     db.session.delete(target)
     db.session.commit()
     
     return redirect(url_for('approval'))
 
 
+# Leave team
+#----------------------------------------------------------
+@app.route('/leaveTeam', methods=['GET', 'POST'])
+def leaveTeam():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    # delete user in database
+    target = Jointeam.query.get(id)
+    db.session.delete(target)
+    db.session.commit()
+    
+    return redirect(url_for('viewteam'))
 
 # Logout
 #----------------------------------------------------------

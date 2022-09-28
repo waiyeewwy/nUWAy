@@ -182,7 +182,7 @@
     function dismissRequest(userid){
         //removing user on front end using DOM
         removeUser = document.getElementById(userid)
-        parent = document.getElementById('container')
+        parent = document.getElementById('signupcontainer')
         parent.removeChild(removeUser)
 
         var target = JSON.stringify(userid)
