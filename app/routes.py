@@ -1,9 +1,11 @@
+from sre_constants import SUCCESS
 from app import app, db
-from flask import render_template, flash, redirect, url_for, request, jsonify
+from flask import render_template, flash, redirect, url_for, request, jsonify, Response
 from flask_login import current_user, login_user,login_required,logout_user
-from app.models import User, Jointeam, Event, Feedback
-from app.forms import LoginForm, SignUpForm, FeedbackForm
+from app.models import User, Jointeam, Event, Feedback, Image, Admin
+from app.forms import LoginForm, SignUpForm, FeedbackForm, AdminForm
 from werkzeug.urls import url_parse
+from werkzeug.utils import secure_filename
 from sqlalchemy import func 
 from app.api.errors import bad_request
 
@@ -18,7 +20,7 @@ def home():
 
 
 # Upcoming event page
-#----------------------------------------------------------
+#----------------------------------------------------------#
 @app.route('/events', methods=['GET'])
 def events():
     events = Event.query.all()
@@ -36,10 +38,21 @@ def media():
 
 # View Team
 #----------------------------------------------------------
-@app.route('/viewteam', methods=['GET'])
+@app.route('/viewteam', methods=['GET','POST'])
+#@login_required
 def viewteam():
     mates = Jointeam.query.all()
-    return render_template("viewteam.html", mates=mates, viewteam=True)
+    admins = Admin.query.all()
+    ad = current_user
+    form = AdminForm()
+    if form.validate_on_submit():
+        user = Admin(email=form.email.data.lower())
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for('viewteam'))
+    return render_template("viewteam.html", ad=ad, current_user=current_user, form=form, admins=admins, mates=mates, viewteam=True)
 
 
 
@@ -77,8 +90,8 @@ def contact():
 @app.route('/adminlogin', methods=['GET', 'POST'])
 def adminlogin():
     
-    #return redirect(url_for('login'))
-    return redirect(url_for('approval'))
+    return redirect(url_for('login'))
+    #return redirect(url_for('approval'))
 
 
 
@@ -89,7 +102,9 @@ def adminlogin():
 def approval():
     requests = Jointeam.query.all()
     feedbacks = Feedback.query.all()
-    return render_template("approval.html", approval=True, requests=requests, feedbacks=feedbacks)
+    images = Image.query.all()
+    ad = current_user
+    return render_template("approval.html", ad=ad,approval=True, requests=requests, feedbacks=feedbacks, images=images)
 
 
 
@@ -101,7 +116,8 @@ def approval():
 def updateevents():
     if request.method == 'GET':
         events = Event.query.all()
-        return render_template("updateevents.html", events=events, upevent=True)
+        ad = current_user
+        return render_template("updateevents.html", ad=ad, events=events, upevent=True)
     else:
         data = request.get_json() or {}
         event = Event(
@@ -124,7 +140,6 @@ def updateevents():
 # Delete past event
 #----------------------------------------------------------
 @app.route('/deleteEvent', methods=['GET','POST'])
-#@login_required
 def deleteEvent():
     temp = request.get_json()
     eventId = json.loads(temp)
@@ -144,7 +159,6 @@ def deleteEvent():
 # Join team
 #----------------------------------------------------------
 @app.route('/joinTeam', methods=['GET','POST'])
-#@login_required
 def joinTeam():
     temp = request.get_json()
     id = json.loads(temp)
@@ -164,7 +178,6 @@ def joinTeam():
 # Dismiss join team request
 #----------------------------------------------------------
 @app.route('/denyJoinTeam', methods=['GET','POST'])
-#@login_required
 def denyJoinTeam():
     temp = request.get_json()
     id = json.loads(temp)
@@ -213,7 +226,7 @@ def approveFeedback():
     requests = Jointeam.query.all()
     feedbacks = Feedback.query.all()
     return render_template("approval.html",approval=True, requests=requests, feedbacks=feedbacks)
-    return redirect(url_for('approval'))
+    #return redirect(url_for('approval'))
 
 
 
@@ -245,22 +258,86 @@ def logout():
 
 # Login/Sign In
 #----------------------------------------------------------
-@app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
     if current_user.is_authenticated:
-        return redirect(url_for('approval'))
+        return redirect(url_for('viewteam'))
+
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = Admin.query.filter_by(email=form.email.data).first()
+
+        # Flash error message if credentials are incorrect
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid admin account')
+            #flash('Invalid admin account')
             return redirect(url_for('adminlogin'))
-        login_user(user)
+        
+        # Log user in if credentials are correct and redirect them to the desired page if specified
+        login_user(user, remember=True)
         next_page = request.args.get('next')
+
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('approval')
+            next_page = url_for('viewteam')
         return redirect(next_page)
     return render_template('adminlogin.html', title='Login for Admin', form=form)
 
+
+# Remove admin
+#----------------------------------------------------------
+@app.route('/removeAdmin', methods=['GET', 'POST'])
+@login_required
+def removeAdmin():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    # delete admin in database
+    target = Admin.query.get(id)
+    db.session.delete(target)
+    db.session.commit()
+    
+    return redirect(url_for('viewteam'))
+
+
+# Sign up (add admin)
+#----------------------------------------------------------
+@app.route('/addadmin', methods=['GET', 'POST'])
+def addadmin():
+    form = AdminForm()
+    if form.validate_on_submit():
+        user = Admin(email=form.email.data.lower())
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for('viewteam'))
+    return render_template('viewteam.html', form=form, viewteam=True)
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    pic = request.files['image_input']
+
+    # check if there is a pic uploaded
+    if not pic:
+        flash("No picture uploaded")
+        return 
+    
+    filename = secure_filename(pic.filename)
+    mimetype = pic.mimetype
+    img = Image(img=pic.read(), mimetype=mimetype, name=filename, approved=False)
+
+    db.session.add(img)
+    db.session.commit()
+    flash("Thanks for sharing your experience with us!")
+    return redirect(url_for('contact'))
+
+
+@app.route('/get_img', methods=['GET'])
+def get_img():
+    temp = request.get_json()
+    id = json.loads(temp)
+    img = Image.query.filter_by(id=id).first()
+    if not img:
+        return render_template("404.html")
+    return Response(img.img, mimetype=img.mimetype)

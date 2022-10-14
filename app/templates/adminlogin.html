@@ -1,20 +1,29 @@
 
     <link rel = 'stylesheet' href = '../static/css/adminlogin.css'>
 
-    <form action="" method="post">
-        <div class="container">
-            <label for="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="email" required>
-        
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required>
-                
-            <button type="submit">Login</button>
+
+
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class = 'container'>
+            <p>
+                <div class = 'label'>{{ form.email.label }}</div>
+                {{ form.email(size=32) }}
+                {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                <div class = 'label'>{{ form.password.label }}</div>
+                {{ form.password(size=32) }}
+                {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p><div class = 'submit'>{{ form.submit() }}</div></p>
+            <button class="btn btn-danger" type="button" onclick="back()">Back</button>
             
-            <button type="button" class="cancelbtn" onclick="back()">Back</a></button>
-            <!-- <span class="psw"><a href="#">Forgot password?</a></span> -->
-          </div>
-    </form>
+        </form>
 
     <script>
         function back(){

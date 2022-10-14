@@ -23,9 +23,8 @@
     
     
         {% for mate in mates %}
-
+        {% if mate.approved is sameas True %}
         <div id={{mate.id}} class="row">
-            {% if mate.approved is sameas True %}
             <div class="col-3 d-flex text-center">
                 <p style="margin:auto;">{{mate.id}}</p>
             </div>
@@ -40,11 +39,86 @@
                     <button class="btn btn-success" style="font-size:10px" onclick="leaveTeam('{{mate.id}}')">Leave Team</button>
                 </p>
             </div>
-            {% endif %}
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+</div>
+
+
+<h2 class="pagetitle">Admin</h2>
+
+<div class="container-holder">
+    <div class="container-fluid text-center" id="containeradmin">
+        <div class="row">
+            <div class="col-4 d-flex text-center">
+                <h6 style="margin:auto">Id</h6>
+            </div>
+            <div class="col-4 d-flex text-center">
+                <h6 style="margin:auto">Email</h6>
+            </div>
+            <div class="col-4 d-flex text-center">
+                <h6 style="margin:auto">Action</h6>
+            </div>
+        </div>
+    
+    
+        {% for admin in admins %}
+
+        <div id={{admin.id}} class="row">
+            <div class="col-4 d-flex text-center">
+                <p style="margin:auto;">{{admin.id}}</p>
+            </div>
+            <div class="col-4 d-flex text-center">
+                <p style="margin:auto;">{{admin.email}}</p>
+            </div>
+            <div class="col-4 d-flex text-center">
+                <p style="margin:auto">
+                    {% if admin.id == 1 %}
+                    <button disabled aria-disabled="true" class="btn btn-success" style="font-size:10px" onclick="removeAdmin('{{admin.id}}')">Remove Admin</button>
+                    {% elif admin.id == current_user.id %}
+                    <button disabled aria-disabled="true" class="btn btn-success" style="font-size:10px" onclick="removeAdmin('{{admin.id}}')">Remove Admin</button>
+                    {% else %}
+                    <button class="btn btn-success" style="font-size:10px" onclick="removeAdmin('{{admin.id}}')">Remove Admin</button>
+                    {% endif %}
+                </p>
+            </div>
         </div>
         {% endfor %}
     </div>
 </div>
+
+
+<h2 class="pagetitle">Add Admin</h2>
+
+
+<div class="container-holder">
+    <div class="container-fluid " id="containeraddadmin">
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+
+            <p>
+                <div class="label"> {{ form.email.label }}</div>
+                {{ form.email }} <br>
+                {% for error in form.email.errors %}
+                <span style="color: red;"> [{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                <div class="label"> {{ form.password.label }}</div>
+                {{ form.password }} <br>
+                {% for error in form.password.errors %}
+                <span style="color: red;"> [{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                <p style="font-size:10px" class = "submit"> {{ form.submit() }}</p>
+            </p>
+        </form>
+    </div>
+</div>
+
 
 <script>
     function leaveTeam(id){
@@ -61,6 +135,22 @@
             data: JSON.stringify(target)
         })
     }
+
+    function removeAdmin(id){
+        //removing user on front end using DOM
+        removeAdmin = document.getElementById(id)
+        parent = document.getElementById('containeradmin')
+        parent.removeChild(removeAdmin)
+
+        var target = JSON.stringify(id)
+        $.ajax({
+            url: 'removeAdmin',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(target)
+        })
+    }
+
 </script>
 
 {% endblock %}
