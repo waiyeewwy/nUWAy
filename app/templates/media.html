@@ -31,7 +31,7 @@
     <div class="sec-header">From Our Passengers</div>
 
     {% for feedback in feedbacks %}
-        {% if feedback.approved is sameas True %}
+        {% if feedback.approved %}
         <div id="feedback.id" class="feedback-col">
             <div>
                 <p style="margin:auto">{{ feedback.feedback }} - </p>
@@ -40,6 +40,12 @@
                 <p style="margin:auto">( {{ feedback.name }} )</p>
             </div>
         </div>
+        {% endif %}
+    {% endfor %}
+
+    {% for image in images %}
+        {% if image.approved %}
+        <img style="margin:auto" src="{{ url_for('get_img', id=image.id ) }}" alt="{{image.name}}" width="250" height="250">
         {% endif %}
     {% endfor %}
 </div>

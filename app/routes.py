@@ -32,7 +32,8 @@ def events():
 @app.route('/media', methods=['GET'])
 def media():
     feedbacks = Feedback.query.all()
-    return render_template("media.html", media=True, feedbacks=feedbacks)
+    images = Image.query.all()
+    return render_template("media.html", media=True, images=images, feedbacks=feedbacks)
 
 
 
@@ -223,10 +224,10 @@ def approveFeedback():
     target.approved = True
     db.session.commit()
 
-    requests = Jointeam.query.all()
-    feedbacks = Feedback.query.all()
-    return render_template("approval.html",approval=True, requests=requests, feedbacks=feedbacks)
-    #return redirect(url_for('approval'))
+    #requests = Jointeam.query.all()
+    #feedbacks = Feedback.query.all()
+    #return render_template("approval.html",approval=True, requests=requests, feedbacks=feedbacks)
+    return redirect(url_for('approval'))
 
 
 
@@ -240,6 +241,35 @@ def dismissFeedback():
 
     # delete user in database
     target = Feedback.query.get(id)
+    db.session.delete(target)
+    db.session.commit()
+    
+    return redirect(url_for('approval'))
+
+
+# Approve image to post on webpage
+#----------------------------------------------------------
+@app.route('/approveImage', methods=['GET','POST'])
+def approveImage():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    target = Image.query.get(id)
+    target.approved = True
+    db.session.commit()
+    return redirect(url_for('approval'))
+
+
+# Dismiss image
+#----------------------------------------------------------
+@app.route('/dismissImage', methods=['GET','POST'])
+#@login_required
+def dismissImage():
+    temp = request.get_json()
+    id = json.loads(temp)
+
+    # delete image in database
+    target = Image.query.get(id)
     db.session.delete(target)
     db.session.commit()
     
@@ -325,18 +355,20 @@ def upload():
     
     filename = secure_filename(pic.filename)
     mimetype = pic.mimetype
+    if not filename or not mimetype:
+        return 'Bad upload!', 400
+    
     img = Image(img=pic.read(), mimetype=mimetype, name=filename, approved=False)
-
     db.session.add(img)
     db.session.commit()
+
     flash("Thanks for sharing your experience with us!")
-    return redirect(url_for('contact'))
+    return redirect(url_for('contact')) 
 
 
-@app.route('/get_img', methods=['GET'])
-def get_img():
-    temp = request.get_json()
-    id = json.loads(temp)
+@app.route('/<int:id>', methods=['GET'])
+def get_img(id):
+
     img = Image.query.filter_by(id=id).first()
     if not img:
         return render_template("404.html")

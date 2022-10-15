@@ -46,7 +46,7 @@ class Feedback(db.Model):
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    img = db.Column(db.Text, unique=True, nullable=False)
+    img = db.Column(db.Text, nullable=False)
     name = db.Column(db.String(128), nullable=False)
     mimetype = db.Column(db.String(128), nullable=False)
     approved = db.Column(db.Boolean)

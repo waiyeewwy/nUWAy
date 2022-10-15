@@ -17,4 +17,11 @@ login.login_view = 'login'
 
 
 from app import routes, models, errors
-from app.models import User
+from app.models import User,Admin
+
+u = Admin.query.filter_by(email="nuwayuwa@gmail.com")
+if u is None:
+    superadmin = Admin(email="nuwayuwa@gmail.com")
+    superadmin.set_password('nuway123')
+    db.session.add(superadmin)
+    db.session.commit()
