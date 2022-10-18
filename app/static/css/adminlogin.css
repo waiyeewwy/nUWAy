@@ -5,9 +5,6 @@ body{
     font-size: 12px;
 }
 
-form {
-    border: 3px solid #ccc;
-}
 
 input[type=text], input[type=password] {
   width: 100%;
@@ -18,17 +15,6 @@ input[type=text], input[type=password] {
   box-sizing: border-box;
 }
 
-/**
-button {
-  background-color: lightseagreen;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: auto;
-}
-*/
 
 button:hover {
   opacity: 0.8;

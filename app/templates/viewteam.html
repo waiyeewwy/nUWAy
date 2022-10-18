@@ -23,7 +23,7 @@
     
     
         {% for mate in mates %}
-        {% if mate.approved is sameas True %}
+        {% if mate.approved %}
         <div id={{mate.id}} class="row">
             <div class="col-3 d-flex text-center">
                 <p style="margin:auto;">{{mate.id}}</p>
